@@ -1,0 +1,2 @@
+networks/FaceNet/caffe_model_face_iter_3000.caffemodel filter=lfs diff=lfs merge=lfs -text
+networks/FaceNet/graph filter=lfs diff=lfs merge=lfs -text
