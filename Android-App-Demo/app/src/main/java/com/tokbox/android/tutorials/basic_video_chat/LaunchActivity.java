@@ -71,8 +71,8 @@ public class LaunchActivity extends AppCompatActivity{
 
 
         PNConfiguration pnConfiguration = new PNConfiguration();
-        pnConfiguration.setSubscribeKey("sub-c-777d4466-c823-11e6-b045-02ee2ddab7fe");
-        pnConfiguration.setPublishKey("pub-c-99f0375f-cc13-46fb-9b30-d1772c531f3a");
+        pnConfiguration.setSubscribeKey("YOUR-KEY");
+        pnConfiguration.setPublishKey("YOUR-KEY");
 
         PubNub pubnub = new PubNub(pnConfiguration);
 

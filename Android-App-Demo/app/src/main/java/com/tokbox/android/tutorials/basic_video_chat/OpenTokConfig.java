@@ -7,11 +7,11 @@ public class OpenTokConfig {
     // ***                      https://dashboard.tokbox.com/projects                           ***
 
     // Replace with your OpenTok API key
-    public static final String API_KEY = "46113392";
+    public static final String API_KEY = "YOUR-KEY";
     // Replace with a generated Session ID
-    public static final String SESSION_ID = "1_MX40NjExMzM5Mn5-MTUyNTU2NDI1MzI2Nn5RV2dhc29tbUxWQitNTGFPSGNpaW56MUh-fg";
+    public static final String SESSION_ID = "YOUR-KEY";
     // Replace with a generated token (from the dashboard or using an OpenTok server SDK)
-    public static final String TOKEN = "T1==cGFydG5lcl9pZD00NjExMzM5MiZzaWc9MWVhMTc2ZTk5MjJmOGRiZTlkMzJmNmNlMmYwZDI5OThkNWU5ZjMzMzpzZXNzaW9uX2lkPTFfTVg0ME5qRXhNek01TW41LU1UVXlOVFUyTkRJMU16STJObjVSVjJkaGMyOXRiVXhXUWl0TlRHRlBTR05wYVc1Nk1VaC1mZyZjcmVhdGVfdGltZT0xNTI1NTY0Mjg3Jm5vbmNlPTAuODI4NTc0MDMzMDE4NTgyJnJvbGU9cHVibGlzaGVyJmV4cGlyZV90aW1lPTE1MjYxNjkwODcmaW5pdGlhbF9sYXlvdXRfY2xhc3NfbGlzdD0=";
+    public static final String TOKEN = "YOUR-KEY";
 
     /*                           ***** OPTIONAL *****
      If you have set up a server to provide session information replace the null value
