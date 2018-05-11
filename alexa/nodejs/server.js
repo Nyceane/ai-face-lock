@@ -5,9 +5,9 @@ var fs = require('fs');
 var PubNub = require('pubnub')
 var app = express()
 
-var http = require("http");
+var https = require("https");
 setInterval(function() {
-    http.get("{your own url}/test");
+    https.get("https://murmuring-bayou-68628.herokuapp.com/test");
 }, 300000);
 
 // respond with "hello world" when a GET request is made to the homepage
@@ -78,9 +78,29 @@ app.get('/alexa', function (req, res)
 		    obj.alexa = 0;
 			json = JSON.stringify(obj); //convert it back to json
 	    	fs.writeFile('alexa.txt', json, 'utf8', null); // write it back
-		}, 10000);
+		}, 5000);
 	    res.send('success') 
 	}});
+})
+
+app.get('/pubnub', function (req, res) 
+{	
+
+	var pubnub = new PubNub({
+                            publishKey : 'YOUR_KEY',
+                            subscribeKey : 'YOUR_KEY'
+                        })
+                                
+                        var publishConfig = {
+                            channel : "facelock",
+                            message : {
+                                title: "Face lock",
+                                description: "Face lock is detecting unusual activity, click to see security cam."
+                            }
+                        };
+                                                    pubnub.publish(publishConfig, function(status, response) {
+                                    console.log(status, response);
+                            });
 })
 
 app.listen(PORT, () => console.log(`Listening on ${ PORT }`))

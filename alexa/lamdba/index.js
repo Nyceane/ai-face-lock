@@ -1,5 +1,7 @@
+
 'use strict';
 var http = require('https'); 
+
 
 exports.handler = function (event, context) {
     try {
@@ -9,13 +11,20 @@ exports.handler = function (event, context) {
          * Uncomment this if statement and populate with your skill's application ID to
          * prevent someone else from configuring a skill that sends requests to this function.
          */
-		 
-     if (event.session.application.applicationId !== "{Your Application Id}") {
+         
+     if (event.session.application.applicationId !== "amzn1.ask.skill.645f001e-5ea6-49b3-90ef-a0d9c0ef25a1") {
          context.fail("Invalid Application ID");
       }
 
         if (event.session.new) {
             onSessionStarted({requestId: event.request.requestId}, event.session);
+        }
+        
+        if (event.session.user.accessToken == undefined) {
+                var cardTitle = "Welcome to AI Face Lock"
+                var speechOutput = "Your axcount is not linked, to start using this skill, please use the companion app to authenticate on Amazon"
+                buildSpeechletResponse(cardTitle, speechOutput, "", true);
+
         }
 
         if (event.request.type === "LaunchRequest") {
@@ -59,7 +68,7 @@ function onLaunch(launchRequest, session, callback) {
     var cardTitle = "Welcome to AI Face Lock"
     var speechOutput = "Welcome to AI Face Lock"
     callback(session.attributes,
-        buildSpeechletResponse(cardTitle, speechOutput, "", true));
+        buildSpeechletResponse(cardTitle, speechOutput, "", false));
 }
 
 /**
@@ -75,6 +84,17 @@ function onIntent(intentRequest, session, callback) {
     // dispatch custom intents to handlers here
     if (intentName == 'AILockIntent') {
         handleTrackRequest(intent, session, callback);
+    }
+    else if(intentName == 'AMAZON.HelpIntent')
+    {
+        callback(session.attributes, buildSpeechletResponseWithoutCard("Please follow hackter.io guide and build out the Face Lock and unlock your bolt, afterwards, just ask face lock to unlock the deadbolt", "", false));
+        //buildSpeechletResponseWithoutCard("Please follow hackter.io guide and build out the Face Lock and unlock your bolt", "", false);
+    }
+    else if (intentName =='AMAZON.CancelIntent' || intentName == 'AMAZON.StopIntent')
+    {
+        callback(session.attributes, buildSpeechletResponseWithoutCard("Exiting AI Face Lock", "", true));
+
+        //buildSpeechletResponseWithoutCard("Exiting AI Face Lock", "", false);
     }
     else {
         throw "Invalid intent";
@@ -93,23 +113,40 @@ function onSessionEnded(sessionEndedRequest, session) {
 }
 
 function handleTrackRequest(intent, session, callback) {
-    var url = "{Your own URL}"; //you can use your own
+    
+    var url = "https://murmuring-bayou-68628.herokuapp.com/"; //you can use your own
                 http.get(url, function(res){ 
                     res.setEncoding('utf8');
                     res.on('data', function (chunk) {
                         console.log('BODY: ' + chunk);
                         var chunk = JSON.parse(chunk);
+                        
+
+                                
                         if(parseInt(chunk.faceid) == 0)
                         {
-                            callback(session.attributes, buildSpeechletResponseWithoutCard("Face lock doesn't see Peter around", "", "true"));
+                            var urlalexa = "https://murmuring-bayou-68628.herokuapp.com/pubnub"; //you can use your own
+                            http.get(urlalexa, function(res1){ 
+                                res1.setEncoding('utf8');
+                                res1.on('data', function (chunk1) {
+                                    console.log('BODY: ' + chunk1);
+                                })})
+                            callback(session.attributes, buildSpeechletResponseWithoutCard("Face lock doesn't recognize any user around", "", "true"));
+
                         }
                         else if (parseInt(chunk.distance) == 0 || parseInt(chunk.breahting) == 0)
                         {
+                                                        var urlalexa = "https://murmuring-bayou-68628.herokuapp.com/pubnub"; //you can use your own
+                            http.get(urlalexa, function(res1){ 
+                                res1.setEncoding('utf8');
+                                res1.on('data', function (chunk1) {
+                                    console.log('BODY: ' + chunk1);
+                                })})
                             callback(session.attributes, buildSpeechletResponseWithoutCard("Walabot is not detecting people's presence", "", "true"));
                         }
                         else
                         {   
-                            var urlalexa = "{Your own URL}/alexa"; //you can use your own
+                            var urlalexa = "https://murmuring-bayou-68628.herokuapp.com/alexa"; //you can use your own
                             http.get(urlalexa, function(res1){ 
                                 res1.setEncoding('utf8');
                                 res1.on('data', function (chunk1) {
@@ -123,6 +160,8 @@ function handleTrackRequest(intent, session, callback) {
                         callback(session.attributes, buildSpeechletResponseWithoutCard("There was a problem Connecting to your AI Lock", "", "true"));
                 })
     //callback(session.attributes, buildSpeechletResponseWithoutCard("test", "", "true"));
+    
+    //callback(session.attributes, buildSpeechletResponseWithoutCard("Face lock doesn't see you around", "", "true"));
 }
 
 // ------- Helper functions to build responses -------
